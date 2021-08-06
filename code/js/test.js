@@ -1,4 +1,6 @@
 let var1, object1, array1;
+print = (string)=> {console.log(string);}
+const input = require('prompt-sync')();
 
 object1 = {
     test: {
@@ -9,9 +11,11 @@ object1 = {
     ay: "string",
 }
 
-const prompt = require('prompt-sync')();
-var1 = prompt("test: ")
-console.log(var1);
+
+
+
+var1 = input("test: ")
+print(var1);
 object1["input"] = var1;
 array1 = Object.entries(object1);
-console.log(array1);
+print(array1);
