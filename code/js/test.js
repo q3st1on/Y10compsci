@@ -1,21 +1,12 @@
-let var1, object1, array1;
-print = (string)=> {console.log(string);}
-const input = require('prompt-sync')();
+print = (string)=> {document.getElementById("console").value = string;}
 
-object1 = {
-    test: {
-        id: 'value',
-        id2: 'value2',
-    },
-    num1: 2,
-    ay: "string",
+testingfunc = () => {
+    print("test")
+    var input = document.getElementById("console").value;
+    input.addEventListener("keyup", function(event) {
+        if (event.key === 'Enter') {
+         event.preventDefault();
+         print("YOUPRESSEDENTER")
+        }
+    });
 }
-
-
-
-
-var1 = input("test: ")
-print(var1);
-object1["input"] = var1;
-array1 = Object.entries(object1);
-print(array1);

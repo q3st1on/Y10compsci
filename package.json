@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@craco/craco": "^6.2.0",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "react-input-autosize": "^3.0.0"
   }
 }
