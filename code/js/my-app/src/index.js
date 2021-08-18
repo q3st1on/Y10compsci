@@ -14,7 +14,8 @@ class TerminalForm extends React.Component {
       currentid: 1, 
       history: [
         {
-          id: 0, 
+          id: 0,
+          command: false, 
           value: "Welcome To My Website"
         }
       ], 
@@ -42,16 +43,16 @@ class TerminalForm extends React.Component {
           {id: 0, value: "k"}
         ]},
         {id: "/home/About Me/I", folder: "False", 
-        value:[ {id: 0, value: "cunt"}
+        value:[ {id: 0, value: "idfk"}
         ]},
         {id: "/home/About Me/D", folder: "False", 
-        value:[ {id: 0, value: "cunt"}
+        value:[ {id: 0, value: "idfk"}
         ]},
         {id: "/home/About Me/F", folder: "False", 
-        value:[ {id: 0, value: "cunt"}
+        value:[ {id: 0, value: "idfk"}
         ]},
         {id: "/home/About Me/K", folder: "False", 
-        value:[ {id: 0, value: "cunt"}
+        value:[ {id: 0, value: "idfk"}
         ]},
       ]
     };
@@ -66,30 +67,27 @@ class TerminalForm extends React.Component {
   }
 
   onKeyDownHandler = e => {
-    console.log("key handler ldshflgsdf | keycode: "+e.keyCode);
+    if (this.counter === 0 || this.state.currentid === 0) {return(null);}
     if (e.keyCode === 38) {
-      /*this.setState((state) => {
-        return {value: state.value = this.state.history.id[this.state.currentid-1]};
+      this.setState((state) => {
+        let histout = this.state.history.find(histout => histout.id === this.state.currentid && histout.command === true).value;
+        return {value: state.value = histout.slice(histout.indexOf("$", 1)+2, histout.length)};
       });
       this.setState((state) => {
-        return {value: state.currentid = this.state.currentid-1};
-      });*/
-      console.log(this.state.history);
+        return {currentid: state.currentid = this.state.currentid-1};
+      });
+
     }
   };
 
   handleSubmit(event) {
     this.counter= this.counter+1;
     this.setState(previousState => ({
-      history: [...previousState.history, {id: this.counter, value: this.state.path+"$ "+this.state.value}]
+      history: [...previousState.history, {id: this.counter, command: true, value: this.state.path+"$ "+this.state.value}]
     }));
-    this.setState((state) => {
-      return {value: state.currentid = this.state.counter};
-    });
-    console.log(this.state.value.charAt(2));
     if (this.state.value.slice(0, 3) === "ls") {
       this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, value: ls(this.state.filesystem, this.state.path)}]
+        history: [...previousState.history, {id: this.counter, command: false, value: ls(this.state.filesystem, this.state.path)}]
       }));
 
     }
@@ -106,31 +104,35 @@ class TerminalForm extends React.Component {
         });
       } else {
         this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, value: ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
+          history: [...previousState.history, {id: this.counter, command: false, value: ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
         }));
       }
     }
     else if (this.state.value.slice(0,4) === "cat ") {
       if ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1 !== "error"){
         this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, value: (cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1}]
+          history: [...previousState.history, {id: this.counter, command: false, value: (cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1}]
         }));
       } else {
         this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, value: ((cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
+          history: [...previousState.history, {id: this.counter, command: false, value: ((cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
         }));
       }
     }
     else {
       this.setState(previousState => ({
-        history: [...previousState.history, {id: this.counter, value: "jsh: command not found: "+this.state.value}]
+        history: [...previousState.history, {id: this.counter, command: false, value: "jsh: command not found: "+this.state.value}]
       }));
     }
     this.setState((state) => {
       return {value: state.value = ""};
     });
     event.preventDefault();
+    this.setState((state) => {
+      return {currentid: state.currentid = this.counter};
+    });
   }
+
   createHistory(history) {
     return history.map[history];
   }

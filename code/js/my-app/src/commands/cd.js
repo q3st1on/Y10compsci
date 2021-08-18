@@ -1,7 +1,7 @@
 export function cd(input, folder, path) {
     var ret1
     var ret2
-    if (input !== ".." && input !== "/"){
+    if (input !== ".." && input !== "/" && input !== "."){
       var index = 'a';
       for(let i = 0; i < folder.length; i++) {
         if(folder[i].id === (path+"/"+input)) {
@@ -24,7 +24,7 @@ export function cd(input, folder, path) {
       }
   
       return({ret1, ret2})
-    } else if(input !== "/") {
+    } else if(input === "..") {
       if (path === "/home") {
         ret1 = path;
         ret2 = "";
@@ -42,7 +42,11 @@ export function cd(input, folder, path) {
       }
       ret2 = "";
       return({ret1, ret2})
-    } else {
+    } else if (input === ".") {
+      ret1 = path;
+      ret2 = "";
+      return({ret1, ret2})
+    }else {
       ret1 = "/home";
       ret2 = "";
       return({ret1, ret2})
