@@ -10,7 +10,8 @@ class TerminalForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '', 
+      value: '',
+      currentid: 1, 
       history: [
         {
           id: 0, 
@@ -23,7 +24,7 @@ class TerminalForm extends React.Component {
           value:[
             {id: 0, value: "About Me"},
             {id: 0, value: "My Projects"},
-            {id: 0, value: "Gay-Ming, the homosexual vietnamese prostitute"}
+            {id: 0, value: "Gaming"}
           ]
         },
         {id: "/home/About Me", folder: "True", value: []},
@@ -33,7 +34,7 @@ class TerminalForm extends React.Component {
         {id: "/home/My Projects/This Low Quality Website", folder: "False", value: [
           {id: 0, value: "this website is shit lol"}]
         },
-        {id: "/home/Gay-Ming, the homosexual vietnamese prostitute", folder: "True", 
+        {id: "/home/Gaming", folder: "True", 
         value:[
           {id: 0, value: "I"},
           {id: 0, value: "D"},
@@ -64,11 +65,27 @@ class TerminalForm extends React.Component {
     this.setState({value: event.target.value});
   }
 
+  onKeyDownHandler = e => {
+    console.log("key handler ldshflgsdf | keycode: "+e.keyCode);
+    if (e.keyCode === 38) {
+      /*this.setState((state) => {
+        return {value: state.value = this.state.history.id[this.state.currentid-1]};
+      });
+      this.setState((state) => {
+        return {value: state.currentid = this.state.currentid-1};
+      });*/
+      console.log(this.state.history);
+    }
+  };
+
   handleSubmit(event) {
     this.counter= this.counter+1;
     this.setState(previousState => ({
       history: [...previousState.history, {id: this.counter, value: this.state.path+"$ "+this.state.value}]
     }));
+    this.setState((state) => {
+      return {value: state.currentid = this.state.counter};
+    });
     console.log(this.state.value.charAt(2));
     if (this.state.value.slice(0, 3) === "ls") {
       this.setState((previousState) => ({
@@ -90,6 +107,17 @@ class TerminalForm extends React.Component {
       } else {
         this.setState((previousState) => ({
           history: [...previousState.history, {id: this.counter, value: ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
+        }));
+      }
+    }
+    else if (this.state.value.slice(0,4) === "cat ") {
+      if ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1 !== "error"){
+        this.setState((previousState) => ({
+          history: [...previousState.history, {id: this.counter, value: (cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1}]
+        }));
+      } else {
+        this.setState((previousState) => ({
+          history: [...previousState.history, {id: this.counter, value: ((cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
         }));
       }
     }
@@ -120,7 +148,7 @@ class TerminalForm extends React.Component {
         {this.commandout}
         <label>
           {this.state.path}{"$ "}      
-          <AutosizeInput autocomplete="off" nname="inputLine" class="no-outline" type="text" value={this.state.value} onChange={this.handleChange} />
+          <AutosizeInput onKeyDown={this.onKeyDownHandler} autocomplete="off" nname="inputLine" class="no-outline" type="text" value={this.state.value} onChange={this.handleChange} />
         </label>
       </form>
     );
