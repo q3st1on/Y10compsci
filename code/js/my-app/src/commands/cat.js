@@ -3,19 +3,17 @@ export function cat (input, folder, path) {
     var ret2
     var index = 'a';
     for(let i = 0; i < folder.length; i++) {
-        console.log(i);
         if(folder[i].id === (path+"/"+input)) {
-            console.log(folder[i].id);
             if (folder[i].folder === "True") {
                 index = 'b';
             } else {
                 index = i;
+                break;
             }
         }
     }
-    console.log();
     if (index !== 'a' && index !== 'b'){
-        ret1 = folder[index].value;
+        ret1 = folder[index].value[0].value;
     }
     else if(index === 'a') {
         ret1 = "error";
@@ -24,6 +22,5 @@ export function cat (input, folder, path) {
         ret1 = "error";
         ret2 = "cat: "+input+": Is a directory";
     }
-    console.log({ret1, ret2});
     return({ret1, ret2})
 }

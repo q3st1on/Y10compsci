@@ -54,6 +54,18 @@ class TerminalForm extends React.Component {
         {id: "/home/About Me/K", folder: "False", 
         value:[ {id: 0, value: "idfk"}
         ]},
+        {id: "/home/Gaming/I", folder: "False", 
+        value:[ {id: 0, value: "idfk"}
+        ]},
+        {id: "/home/Gaming/D", folder: "False", 
+        value:[ {id: 0, value: "idfk"}
+        ]},
+        {id: "/home/Gaming/F", folder: "False", 
+        value:[ {id: 0, value: "idfk"}
+        ]},
+        {id: "/home/Gaming/K", folder: "False", 
+        value:[ {id: 0, value: "idfk"}
+        ]},
       ]
     };
     this.counter = 0;
@@ -89,7 +101,6 @@ class TerminalForm extends React.Component {
       this.setState((previousState) => ({
         history: [...previousState.history, {id: this.counter, command: false, value: ls(this.state.filesystem, this.state.path)}]
       }));
-
     }
     else if (this.state.value === "pwd") {
       this.setState((previousState) => ({
@@ -98,24 +109,26 @@ class TerminalForm extends React.Component {
 
     }
     else if (this.state.value.slice(0,3) === "cd ") {
-      if ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1 !== "error"){
+      let val = (cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path));
+      if (val.ret1 !== "error"){
         this.setState((state) => {
-          return {path: (cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1};
+          return {path: val.ret1};
         });
       } else {
         this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, value: ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
+          history: [...previousState.history, {id: this.counter, command: false, value: val.ret2}]
         }));
       }
     }
     else if (this.state.value.slice(0,4) === "cat ") {
-      if ((cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1 !== "error"){
+      let val = (cat(this.state.value.slice(4), this.state.filesystem, this.state.path));
+      if (val.ret1 === "error"){
         this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, value: (cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret1}]
+          history: [...previousState.history, {id: this.counter, command: false, value: (val.ret2)}]
         }));
       } else {
         this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, value: ((cat(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path)).ret2)}]
+          history: [...previousState.history, {id: this.counter, command: false, value: (val.ret1)}]
         }));
       }
     }
