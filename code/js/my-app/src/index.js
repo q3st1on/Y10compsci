@@ -6,6 +6,7 @@ import { ls } from  './commands/ls.js';
 import { cd } from  './commands/cd.js';
 import { cat } from './commands/cat.js';
 import { help } from './commands/help.js';
+import { exec } from './commands/exec.js';
 
 class TerminalForm extends React.Component {
   constructor(props) {
@@ -181,8 +182,12 @@ class TerminalForm extends React.Component {
           history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, "")}]
         }));
       }
-    } else if (this.state.value === "") {
-      
+    } else if (this.state.value.slice(0,2) === "./") {
+      this.setState(previousState => ({
+        history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: exec(this.state.value)}]
+      }));
+    }else if (this.state.value === "") {
+
     }
     else {
       this.setState(previousState => ({
