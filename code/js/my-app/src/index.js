@@ -83,7 +83,7 @@ class TerminalForm extends React.Component {
   componentDidUpdate () {
     this.scrollToBottom()
   }
-  
+
   handleChange(event) {
     this.setState({value: event.target.value});
   }
@@ -181,6 +181,8 @@ class TerminalForm extends React.Component {
           history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, "")}]
         }));
       }
+    } else if (this.state.value === "") {
+      
     }
     else {
       this.setState(previousState => ({
