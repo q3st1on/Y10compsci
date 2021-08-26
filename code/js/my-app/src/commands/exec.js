@@ -1,3 +1,3 @@
 export function exec(command) {
-    return(null)
+    return({style: {color: `lightblue`}, value: command})
 }

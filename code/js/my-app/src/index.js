@@ -183,8 +183,9 @@ class TerminalForm extends React.Component {
         }));
       }
     } else if (this.state.value.slice(0,2) === "./") {
+      let ret = exec(this.state.value.slice(2, this.state.value.length));
       this.setState(previousState => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: exec(this.state.value)}]
+        history: [...previousState.history, {id: this.counter, command: false, style: ret.style, prompt: false, value: ret.value}]
       }));
     }else if (this.state.value === "") {
 
