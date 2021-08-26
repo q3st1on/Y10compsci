@@ -15,7 +15,7 @@ export function ls(folder, path) {
       </div>
         <div>
             {folder[index].value.map(id1 => (
-                  <p style={{colour: `blue`}}>{id1.value}</p>
+                  <p style={{colour: `lightblue`}}>{id1.value}</p>
             ))}
         </div>
         </>
