@@ -5,6 +5,7 @@ import AutosizeInput from 'react-input-autosize';
 import { ls } from  './commands/ls.js';
 import { cd } from  './commands/cd.js';
 import { cat } from './commands/cat.js';
+import { help } from './commands/help.js';
 
 class TerminalForm extends React.Component {
   constructor(props) {
@@ -76,10 +77,21 @@ class TerminalForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  componentDidMount () {
+    this.scrollToBottom()
+  }
+  componentDidUpdate () {
+    this.scrollToBottom()
+  }
+  
   handleChange(event) {
     this.setState({value: event.target.value});
   }
+  scrolldownRef = React.createRef();
 
+  scrollToBottom = () => {
+    this.scrolldownRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
   onKeyDownHandler = e => {
     if (this.counter === 0 || this.state.currentid === 0) {return(null);}
     if (e.keyCode === 38) {
@@ -118,12 +130,12 @@ class TerminalForm extends React.Component {
     }
     else if (this.state.value === "whoami") {
       this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: "root"}]
+        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: "q3st1on"}]
       }));
     }
     else if (this.state.value === "id") {
       this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: "uid=0(root) gid=0(root) groups=0(root)"}]
+        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: "uid=1000(q3st1on) gid=1000(q3st1on) groups=1000(q3st1on),5(tty)"}]
       }));
     }
     else if (this.state.value.slice(0,3) === "cd ") {
@@ -147,6 +159,26 @@ class TerminalForm extends React.Component {
       } else {
         this.setState((previousState) => ({
           history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: (val.ret1)}]
+        }));
+      }
+    }
+    else if (this.state.value.slice(0,4) === "sudo") {
+      this.setState((previousState) => ({
+        history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: "As If I'd Trust You With That :)"}]
+      }));
+    }
+    else if ((this.state.value.slice(0,4) === "help") || (this.state.value.slice(0,1) === "?")) {
+      if (((this.state.value.slice(0,4) === "help") && (this.state.value.length > 4))) {
+        this.setState((previousState) => ({
+          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, this.state.value.slice(5, this.state.value.length))}]
+        }));
+      } else if (((this.state.value.slice(0,1) === "?") && (this.state.value.length > 1))) {
+        this.setState((previousState) => ({
+          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, this.state.value.slice(2, this.state.value.length))}]
+        }));
+      } else {
+        this.setState((previousState) => ({
+          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, "")}]
         }));
       }
     }
@@ -182,7 +214,7 @@ class TerminalForm extends React.Component {
         <label>
           <div >
             <span style = {{color: `blue`}}>    {"┌─["}</span>
-            <span style={{color: `limegreen`}}> {"root"}</span>
+            <span style={{color: `limegreen`}}> {"q3st1on"}</span>
             <span style={{color: `gray`}}>      {"@"}</span>
             <span style={{color: `#009ba1`}}>   {"jshtest"}</span>
             <span style = {{color: `blue`}}>    {"]"}</span>
@@ -254,21 +286,22 @@ class TerminalForm extends React.Component {
   
   render() {
     return (
-
+      <>
       <form onSubmit={this.handleSubmit}>
         <div>
           {this.renderHistory(this.state.history)}
         </div>
         {this.commandout}
-        <label>
+        <label id = "inputbox" ref={this.messagesEndRef} >
           {this.getPrompt(this.getTime(), this.state.path)}
           <label>
             <AutosizeInput onKeyDown={this.onKeyDownHandler}
-            autocomplete="off" nname="inputLine" class="no-outline"
+            autoComplete="off" nname="inputLine" class="no-outline"
             type="text" value={this.state.value} onChange={this.handleChange} />
           </label>
         </label>
       </form>
+      </>
     );
   }
 }

@@ -13,11 +13,11 @@ export function ls(folder, path) {
       <div>
       ..
       </div>
-        <div>
-            {folder[index].value.map(id1 => (
-                  <p style={{colour: `lightblue`}}>{id1.value}</p>
-            ))}
-        </div>
-        </>
+      <div>
+          {folder[index].value.map(id1 => (
+                <p style={{colour: `lightblue`}}>{id1.value}</p>
+          ))}
+      </div>
+      </>
     )
 }
