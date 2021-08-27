@@ -7,12 +7,14 @@ import { cd } from  './commands/cd.js';
 import { cat } from './commands/cat.js';
 import { help } from './commands/help.js';
 import { exec } from './commands/exec.js';
+import { thisLowQualSite } from './programs/tlqs.js';
 
 class TerminalForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: '',
+      current_program: "jsh",
       currentid: 1, 
       history: [
         {
@@ -107,7 +109,7 @@ class TerminalForm extends React.Component {
     }
   };
 
-  handleSubmit(event) {
+  handlettySubmit(event) {
     this.counter= this.counter+1;
     console.log(this.getPrompt());
     this.setState(previousState => ({
@@ -293,24 +295,30 @@ class TerminalForm extends React.Component {
   }
   
   render() {
-    return (
-      <>
-      <form onSubmit={this.handleSubmit}>
-        <div>
-          {this.renderHistory(this.state.history)}
-        </div>
-        {this.commandout}
-        <label id = "inputbox" ref={this.messagesEndRef} >
-          {this.getPrompt(this.getTime(), this.state.path)}
-          <label>
-            <AutosizeInput onKeyDown={this.onKeyDownHandler}
-            autoComplete="off" nname="inputLine" class="no-outline"
-            type="text" value={this.state.value} onChange={this.handleChange} />
+    if (this.state.current_program === "jsh") {
+      return (
+        <>
+        <form onSubmit={this.handlettySubmit}>
+          <div>
+            {this.renderHistory(this.state.history)}
+          </div>
+          {this.commandout}
+          <label id = "inputbox" ref={this.messagesEndRef} >
+            {this.getPrompt(this.getTime(), this.state.path)}
+            <label>
+              <AutosizeInput onKeyDown={this.onKeyDownHandler}
+              autoComplete="off" nname="inputLine" class="no-outline"
+              type="text" value={this.state.value} onChange={this.handleChange} />
+            </label>
           </label>
-        </label>
-      </form>
-      </>
-    );
+        </form>
+        </>
+      );
+    } else if (this.state.current_program === "This Low Quality Website") {
+      return(
+        thisLowQualSite()
+      );
+    }
   }
 }
 
