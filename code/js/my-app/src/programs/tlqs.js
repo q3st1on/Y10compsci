@@ -1,3 +1,7 @@
 export function thisLowQualSite() {
-    return(null);
+    return(
+        <>
+        <div style = {{color: `red`}}><b>CUNT</b></div>
+        </>
+    );
 }

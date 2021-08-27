@@ -7,14 +7,44 @@ import { cd } from  './commands/cd.js';
 import { cat } from './commands/cat.js';
 import { help } from './commands/help.js';
 import { exec } from './commands/exec.js';
-import { thisLowQualSite } from './programs/tlqs.js';
+
+class TlqsForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
+}
+
+class MasterForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentprogram: 'jsh',
+    }
+  }
+  render () {
+    if (this.state.currentprogram === 'jsh') {
+      let ret = <TerminalForm />;
+      this.setState((state) => {
+        return {currentprogram: state.currentprogram = ret.prog}
+      });
+      return(ret.content)
+    } else if (this.state.currentprogram === 'tlqs') {
+      let ret = <TlqsForm />;
+      this.setState((state) => {
+        return {currentprogram: state.currentprogram = ret.prog}
+      });
+      return(ret.content)
+    }
+  }
+}
 
 class TerminalForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: '',
-      current_program: "jsh",
+      current_program: 'jsh',
       currentid: 1, 
       history: [
         {
@@ -78,8 +108,9 @@ class TerminalForm extends React.Component {
     };
     this.counter = 0;
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlettySubmit = this.handlettySubmit.bind(this);
   }
+  /*THIS CODE IS FOR RENDERING THE TTY*/
   componentDidMount () {
     this.scrollToBottom()
   }
@@ -189,6 +220,12 @@ class TerminalForm extends React.Component {
       this.setState(previousState => ({
         history: [...previousState.history, {id: this.counter, command: false, style: ret.style, prompt: false, value: ret.value}]
       }));
+      this.setState(previousState => ({
+        history: [...previousState.history, {id: this.counter, command: false, style: ret.style, prompt: false, value: ret.value}]
+      }));
+      this.setState((state) => {
+        return {current_program: state.current_program = ret.value};
+      });
     }else if (this.state.value === "") {
 
     }
@@ -293,10 +330,11 @@ class TerminalForm extends React.Component {
       </div>
     )
   }
+  /*THIS IS HE END OF CODE FOR RENDERING THE TTY*/
   
   render() {
     if (this.state.current_program === "jsh") {
-      return (
+      return ({prog: "jsh", content:
         <>
         <form onSubmit={this.handlettySubmit}>
           <div>
@@ -312,11 +350,14 @@ class TerminalForm extends React.Component {
             </label>
           </label>
         </form>
-        </>
+        </>}
       );
     } else if (this.state.current_program === "This Low Quality Website") {
+      this.setState((state) => {
+        return {current_program: state.current_program = "jsh"};
+      });
       return(
-        thisLowQualSite()
+        {prog: "tlqw"}
       );
     }
   }
@@ -324,7 +365,7 @@ class TerminalForm extends React.Component {
 
 ReactDOM.render(
   <React.StrictMode>
-    <TerminalForm />
+    <MasterForm />
   </React.StrictMode>,
   document.getElementById('root')
 );
