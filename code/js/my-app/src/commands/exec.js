@@ -5,6 +5,8 @@ export function exec(binary, folder, path) {
         if(folder[i].id === (path+"/"+binary)) {
             if (folder[i].folder === true) {
                 index = 'b';
+            } else if (folder[i].x === false) {
+                index = 'b'
             } else {
                 index = i;
                 break;
@@ -15,9 +17,9 @@ export function exec(binary, folder, path) {
         out = folder[index].value[0].value;
     }
     else if(index === 'a') {
-        out = "error";
+        out = "No such file or directory";
     } else if (index === 'b') {
-        out = "error";
+        out = "jsh: permission denied: "+path+"/"+binary;
     }
     return({style: {color: `lightblue`}, value: out})
 }
