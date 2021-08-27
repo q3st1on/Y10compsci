@@ -18,24 +18,37 @@ class TlqsForm extends React.Component {
 class MasterForm extends React.Component {
   constructor(props) {
     super(props);
+    this.props = {
+      currentprogram: 'jsh',
+    }
     this.state = {
       currentprogram: 'jsh',
     }
   }
-  render () {
-    if (this.state.currentprogram === 'jsh') {
-      let ret = <TerminalForm />;
+  renderCheck(cprog)  {
+    if (cprog === 'jsh') {
+      let ret = <TerminalForm />
       this.setState((state) => {
-        return {currentprogram: state.currentprogram = ret.prog}
+        return {currentprogram: state.currentprogram = this.props.currentprogram}
       });
-      return(ret.content)
-    } else if (this.state.currentprogram === 'tlqs') {
-      let ret = <TlqsForm />;
+      console.log("prog: ");
+      console.log(this.props.currentprogram);
+      console.log(this.props);
+      console.log(this.state);
+      return(ret);
+    } else if (cprog === 'tlqs') {
+      let ret = new TlqsForm();
       this.setState((state) => {
-        return {currentprogram: state.currentprogram = ret.prog}
+        return {currentprogram: state.currentprogram = ret.current_program}
       });
-      return(ret.content)
+      return(ret);
+    } else {
+      return(new TerminalForm());
     }
+  }
+
+  render () {
+    return(this.renderCheck(this.state.currentprogram))
   }
 }
 
@@ -330,11 +343,12 @@ class TerminalForm extends React.Component {
       </div>
     )
   }
-  /*THIS IS HE END OF CODE FOR RENDERING THE TTY*/
+  /*THIS IS THE END OF CODE FOR RENDERING THE TTY*/
   
   render() {
+    <MasterForm current_program={this.state.currentprogram} />
     if (this.state.current_program === "jsh") {
-      return ({prog: "jsh", content:
+      return (
         <>
         <form onSubmit={this.handlettySubmit}>
           <div>
@@ -350,7 +364,7 @@ class TerminalForm extends React.Component {
             </label>
           </label>
         </form>
-        </>}
+        </>
       );
     } else if (this.state.current_program === "This Low Quality Website") {
       this.setState((state) => {
