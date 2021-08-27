@@ -27,49 +27,49 @@ class TerminalForm extends React.Component {
       ], 
       path: "/home", 
       filesystem: [
-        {id: "/home", folder: "True",
+        {id: "/home", x: false, folder: true,
           value:[
             {id: 0, value: "About Me"},
             {id: 0, value: "My Projects"},
             {id: 0, value: "Gaming"}
           ]
         },
-        {id: "/home/About Me", folder: "True", value: []},
-        {id: "/home/My Projects", folder: "True", value: [
+        {id: "/home/About Me", x: false, folder: true, value: []},
+        {id: "/home/My Projects", x: false, folder: true, value: [
           {id: 0, value: "This Low Quality Website"},
         ]},
-        {id: "/home/My Projects/This Low Quality Website", folder: "False", value: [
+        {id: "/home/My Projects/This Low Quality Website", x: true, folder: false, value: [
           {id: 0, value: "this website is shit lol"}]
         },
-        {id: "/home/Gaming", folder: "True", 
+        {id: "/home/Gaming", x: false, folder: true, 
         value:[
           {id: 0, value: "I"},
           {id: 0, value: "D"},
           {id: 0, value: "F"},
           {id: 0, value: "k"}
         ]},
-        {id: "/home/About Me/I", folder: "False", 
+        {id: "/home/About Me/I", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/About Me/D", folder: "False", 
+        {id: "/home/About Me/D", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/About Me/F", folder: "False", 
+        {id: "/home/About Me/F", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/About Me/K", folder: "False", 
+        {id: "/home/About Me/K", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/Gaming/I", folder: "False", 
+        {id: "/home/Gaming/I", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/Gaming/D", folder: "False", 
+        {id: "/home/Gaming/D", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/Gaming/F", folder: "False", 
+        {id: "/home/Gaming/F", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
-        {id: "/home/Gaming/K", folder: "False", 
+        {id: "/home/Gaming/K", x: false, folder: false, 
         value:[ {id: 0, value: "idfk"}
         ]},
       ]
@@ -183,7 +183,7 @@ class TerminalForm extends React.Component {
         }));
       }
     } else if (this.state.value.slice(0,2) === "./") {
-      let ret = exec(this.state.value.slice(2, this.state.value.length));
+      let ret = exec(this.state.value.slice(2, this.state.value.length), this.state.filesystem, this.state.path);
       this.setState(previousState => ({
         history: [...previousState.history, {id: this.counter, command: false, style: ret.style, prompt: false, value: ret.value}]
       }));

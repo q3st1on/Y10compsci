@@ -5,7 +5,7 @@ export function cd(input, folder, path) {
       var index = 'a';
       for(let i = 0; i < folder.length; i++) {
         if(folder[i].id === (path+"/"+input)) {
-          if (folder[i].folder === "False") {
+          if (folder[i].folder === false) {
             index = 'b';
           } else {
             index = i;

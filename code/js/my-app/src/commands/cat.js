@@ -4,7 +4,7 @@ export function cat (input, folder, path) {
     var index = 'a';
     for(let i = 0; i < folder.length; i++) {
         if(folder[i].id === (path+"/"+input)) {
-            if (folder[i].folder === "True") {
+            if ((folder[i].folder === true) || (folder[i].x === false)) {
                 index = 'b';
             } else {
                 index = i;
