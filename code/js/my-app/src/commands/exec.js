@@ -13,6 +13,7 @@ export function exec(binary, folder, path) {
             }
         }
     }
+
     if (index !== 'a' && index !== 'b'){
         out = folder[index].value[0].value;
     }
@@ -21,5 +22,5 @@ export function exec(binary, folder, path) {
     } else if (index === 'b') {
         out = "jsh: permission denied: "+path+"/"+binary;
     }
-    return({style: {color: `lightblue`}, value: out})
+    return({style: {color: `lightblue`}, value: out, errorcheck: index})
 }
