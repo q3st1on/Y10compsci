@@ -22,5 +22,7 @@ export function exec(binary, folder, path) {
     } else if (index === 'b') {
         out = "jsh: permission denied: "+path+"/"+binary;
     }
-    return({style: {color: `lightblue`}, value: out, errorcheck: index})
+
+    /*return({style: {color: `lightblue`}, value: out, errorcheck: index})*/
+    return({style: {color: `lightblue`}, value: "tqls", errorcheck: 0})
 }

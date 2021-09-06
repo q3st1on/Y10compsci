@@ -5,7 +5,7 @@ import { cd } from  '../commands/cd.js';
 import { cat } from '../commands/cat.js';
 import { help } from '../commands/help.js';
 import { exec } from '../commands/exec.js';
-import { currentProgContext, progs } from '..';
+import currentProgContext from '../progContext.js';
 import React from 'react';
 
 export class TerminalForm extends React.Component {
@@ -301,12 +301,8 @@ export class TerminalForm extends React.Component {
   /*THIS IS THE END OF CODE FOR RENDERING THE TTY*/
   
   render() {
+    console.log(this.state.current_program)
     if (this.state.current_program === "jsh") {
-      <currentProgContext.Consumer>
-      {({ prog, toggleProg }) => (
-         toggleProg("tlqs")
-      )};
-      </currentProgContext.Consumer>
       return (
         <>
         <form onSubmit={this.handlettySubmit}>
@@ -325,15 +321,23 @@ export class TerminalForm extends React.Component {
         </form>
         </>
       );
-    } else if (this.state.current_program === "tlqs") {
+    } else {
       this.setState((state) => {
         return {current_program: state.current_program = "jsh"};
       });
+      try{
       <currentProgContext.Consumer>
         {({ prog, toggleProg }) => (
-          toggleProg("tlqs")
+          prog = 'tqls',
+          toggleProg(toggleProg)
         )};
       </currentProgContext.Consumer>
+      } catch(e) {
+        console.log("Error: "+e)
+      }
+      console.log("tlqs lmao");
+      console.log(this.props);
+      console.log(currentProgContext);
       return(
         <>
         <form onSubmit={this.handlettySubmit}>

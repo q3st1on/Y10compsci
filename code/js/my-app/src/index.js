@@ -3,53 +3,40 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { TerminalForm } from './programs/Terminal';
 import { TlqsForm } from './programs/tlqs';
+import currentProgContext from './progContext.js';
 
 export const progs = {
   jsh: 'jsh',
   tlqs: 'tlqs'
 };
 
-export const currentProgContext = React.createContext({
-  program: progs.jsh,
-  toggleProg: () => {},
-});
+function MasterForm() {
+  const [prog, setProg] = React.useState('jsh');
 
+  const toggleProg = () => {
+    setProg((prog) => {
+      return prog === 'jsh' ? 'tqls' : 'jsh'
+    });
+  };
 
-class MasterForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.toggleProg = () => {
-      this.setState(state => ({
-        prog:
-          state.prog === progs.jsh
-            ?progs.jsh
-            :progs.tlqs,
-      }));
-    };
-    this.state = {
-      prog: progs.jsh,
-      toggleprog: this.toggleProg,
-    };
-  }
-  renderCheck(cprog)  {
-    if (cprog === 'jsh') {
-      let ret = <TerminalForm />
-      return(ret);
-    } else if (cprog === 'tlqs') {
-      let ret = <TlqsForm />;
-      return(ret);
-    } else {
-      return(<TerminalForm />);
-    }
-  }
-
-  render () {
-    console.log(this.state.prog);
-    return(
-      <currentProgContext.Provider value={this.state}>
-        {this.renderCheck(this.state.prog)}
-      </currentProgContext.Provider>
-    )
+  const value = React.useMemo(() => ({
+    prog,
+    toggleProg
+  }), [prog]);
+  
+  try{
+  if (prog === 'jsh') {
+    let ret = <currentProgContext.Provider value={value}><TerminalForm /></currentProgContext.Provider>;
+    return(ret);
+  } else if (prog === 'tlqs') {
+    let ret = <currentProgContext.Provider value={value}><TlqsForm /></currentProgContext.Provider>;
+    return(ret);
+  } else {
+    return(<currentProgContext.Provider value={value}><TerminalForm /></currentProgContext.Provider>);
+  }} catch(e) {
+    console.log("Error: "+e);
+    let ret = <currentProgContext.Provider value={value}><TlqsForm /></currentProgContext.Provider>;
+    return(ret);
   }
 }
 
