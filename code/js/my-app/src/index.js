@@ -111,7 +111,7 @@ const TerminalForm = (props) => {
   const scrollToBottom = () => {
     scrolldownRef.current?.scrollIntoView({ behavior: "smooth" })
   };
-  const onKeyDownHandler = (event) => {
+  const onKeyDownHandler = event => {
     if (counter === 0 || currentid === 0) {return(null);}
     if (event.keyCode === 38) {
       let histout = history.find(histout => histout.id === currentid && histout.command === true).value;
@@ -273,55 +273,52 @@ const TerminalForm = (props) => {
   };
   /*THIS IS THE END OF CODE FOR RENDERING THE TTY*/
   const changeToTqls = () => changeProg("tqls");
-
-
-    console.log(current_program)
-    if (current_program === "jsh") {
-      return (
-        <>
-        <form onSubmit={handlettySubmit()}>
-          <div>
-            {renderHistory(history)}
-          </div>
-          <label id = "inputbox">
-            {getPrompt(getTime(), path)}
-            <label>
-              <AutosizeInput onKeyDown={onKeyDownHandler()}
-              autoComplete="off" nname="inputLine" class="no-outline"
-              type="text" value={value} onChange={handleChange()} />
-            </label>
+  if (current_program === "jsh") {
+    return (
+      <>
+      <form onSubmit={handlettySubmit()}>
+        <div>
+          {renderHistory(history)}
+        </div>
+        <label id = "inputbox">
+          {getPrompt(getTime(), path)}
+          <label>
+            <AutosizeInput onKeyDown={() => onKeyDownHandler}
+            autoComplete="off" nname="inputLine" class="no-outline"
+            type="text" value={value} onChange={handleChange()} />
           </label>
-        </form>
-        </>
-      );
-    } else {
-      setCurrent_program("jsh");
-      try {
-        this.changeToTqls();
-      } catch(e) {
-        console.log("Error: "+e)
-      }
-      console.log("tlqs lmao");
-      console.log(props);
-      console.log(progContext);
-      return(
-        <>
-        <form onSubmit={handlettySubmit()}>
-          <div>
-            {renderHistory(history)}
-          </div>
-          <label id = "inputbox">
-            {getPrompt(getTime(), path)}
-            <label>
-              <AutosizeInput onKeyDown={onKeyDownHandler()}
-              autoComplete="off" nname="inputLine" class="no-outline"
-              type="text" value={value} onChange={handleChange()} />
-            </label>
+        </label>
+      </form>
+      </>
+    );
+  } else {
+    setCurrent_program("jsh");
+    try {
+      this.changeToTqls();
+    } catch(e) {
+      console.log("Error: "+e)
+    }
+    console.log("tlqs lmao");
+    console.log(props);
+    console.log(progContext);
+    return(
+      <>
+      <form onSubmit={handlettySubmit()}>
+        <div>
+          {renderHistory(history)}
+        </div>
+        <label id = "inputbox">
+          {getPrompt(getTime(), path)}
+          <label>
+            <AutosizeInput onKeyDown={() => onKeyDownHandler}
+            autoComplete="off" nname="inputLine" class="no-outline"
+            type="text" value={value} onChange={handleChange()} />
           </label>
-        </form>
-        </>
-      );
-    };
+        </label>
+      </form>
+      </>
+    );
+  };
 };
 
 ReactDOM.render(
