@@ -1,3 +1,6 @@
-import React from 'react';
-const currentProgContext = React.createContext("jsh");
-export default currentProgContext;
+import { createContext } from 'react';
+const progContext = createContext({
+    program: 'jsh',
+    changeProg: (prog) => {}
+});
+export default progContext;

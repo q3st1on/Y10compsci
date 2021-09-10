@@ -5,225 +5,180 @@ import { cd } from  '../commands/cd.js';
 import { cat } from '../commands/cat.js';
 import { help } from '../commands/help.js';
 import { exec } from '../commands/exec.js';
-import currentProgContext from '../progContext.js';
-import React from 'react';
+import progContext from '../progContext.js';
+import React, { useContext, useEffect, useState } from 'react';
 
-export class TerminalForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      current_program: 'jsh',
-      currentid: 1, 
-      history: [
-        {
-          id: 0,
-          command: false, 
-          style: {color: `white`},
-          prompt: false,
-          date: {},
-          path: {},
-          value: "Welcome To My Website"
-        }
-      ], 
-      path: "/home", 
-      filesystem: [
-        {id: "/home", x: false, folder: true,
-          value:[
-            {id: 0, value: "About Me"},
-            {id: 0, value: "My Projects"},
-            {id: 0, value: "Gaming"}
-          ]
-        },
-        {id: "/home/About Me", x: false, folder: true, value: []},
-        {id: "/home/My Projects", x: false, folder: true, value: [
-          {id: 0, value: "This Low Quality Website"},
-        ]},
-        {id: "/home/My Projects/This Low Quality Website", x: true, folder: false, value: [
-          {id: 0, value: "tlqs"}]
-        },
-        {id: "/home/Gaming", x: false, folder: true, 
-        value:[
-          {id: 0, value: "I"},
-          {id: 0, value: "D"},
-          {id: 0, value: "F"},
-          {id: 0, value: "k"}
-        ]},
-        {id: "/home/About Me/I", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/About Me/D", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/About Me/F", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/About Me/K", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/Gaming/I", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/Gaming/D", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/Gaming/F", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
-        {id: "/home/Gaming/K", x: false, folder: false, 
-        value:[ {id: 0, value: "idfk"}
-        ]},
+
+
+const TerminalForm = (props) => {
+  const [value, setValue]= useState('');
+  const [current_program, setCurrent_program]= useState('jsh');
+  const [currentid, setCurrentid]= useState(1); 
+  const [history, setHistory]= useState([
+    {
+      id: 0,
+      command: false, 
+      style: {color: `white`},
+      prompt: false,
+      date: {},
+      path: {},
+      value: "Welcome To My Website"
+    }
+  ]); 
+  const [path, setPath]= useState("/home"); 
+  const [filesystem, setFilesystem] = useState([
+    {id: "/home", x: false, folder: true,
+      value:[
+        {id: 0, value: "About Me"},
+        {id: 0, value: "My Projects"},
+        {id: 0, value: "Gaming"}
       ]
-    };
-    this.counter = 0;
-    this.handleChange = this.handleChange.bind(this);
-    this.handlettySubmit = this.handlettySubmit.bind(this);
-  }
+    },
+    {id: "/home/About Me", x: false, folder: true, value: []},
+    {id: "/home/My Projects", x: false, folder: true, value: [
+      {id: 0, value: "This Low Quality Website"},
+    ]},
+    {id: "/home/My Projects/This Low Quality Website", x: true, folder: false, value: [
+      {id: 0, value: "tlqs"}]
+    },
+    {id: "/home/Gaming", x: false, folder: true, 
+    value:[
+      {id: 0, value: "I"},
+      {id: 0, value: "D"},
+      {id: 0, value: "F"},
+      {id: 0, value: "k"}
+    ]},
+    {id: "/home/About Me/I", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/About Me/D", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/About Me/F", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/About Me/K", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/Gaming/I", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/Gaming/D", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/Gaming/F", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+    {id: "/home/Gaming/K", x: false, folder: false, 
+    value:[ {id: 0, value: "idfk"}
+    ]},
+  ]);
+  const [counter, setCounter] = useState(0);
+  const { changeProg } = useContext(progContext);
   /*THIS CODE IS FOR RENDERING THE TTY*/
-  componentDidMount () {
-    this.scrollToBottom()
-  }
-  componentDidUpdate () {
-    this.scrollToBottom()
-  }
+  useEffect(()=>{
+    scrollToBottom();
+  },[])
+  useEffect(() => {
+    scrollToBottom();
+  })
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-  scrolldownRef = React.createRef();
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+  const scrolldownRef = React.createRef();
 
-  scrollToBottom = () => {
-    this.scrolldownRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-  onKeyDownHandler = e => {
-    if (this.counter === 0 || this.state.currentid === 0) {return(null);}
+  const scrollToBottom = () => {
+    scrolldownRef.current?.scrollIntoView({ behavior: "smooth" })
+  };
+  const onKeyDownHandler = e => {
+    if (counter === 0 || currentid === 0) {return(null);}
     if (e.keyCode === 38) {
       this.setState((state) => {
-        let histout = this.state.history.find(histout => histout.id === this.state.currentid && histout.command === true).value;
-        return {value: state.value = histout.slice(histout.indexOf("$", 1)+2, histout.length)};
+        let histout = history.find(histout => histout.id === currentid && histout.command === true).value;
+        return {value: value = histout.slice(histout.indexOf("$", 1)+2, histout.length)};
       });
-      this.setState((state) => {
-        return {currentid: state.currentid = this.state.currentid-1};
-      });
+      setCurrentid(currentid-1);
 
     }
   };
 
-  handlettySubmit(event) {
-    this.counter= this.counter+1;
-    console.log(this.getPrompt());
-    this.setState(previousState => ({
-      history: [...previousState.history, {id: this.counter, command: true, style: {color: `purple`}, prompt: true, date: this.getTime(), path: this.state.path, value: this.state.value}]
-    }));
-    if (this.state.value.slice(0, 3) === "ls") {
-      this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: ls(this.state.filesystem, this.state.path)}]
-      }));
+  const handlettySubmit = (event) => {
+    counter= counter+1;
+    setHistory([history, {id: counter, command: true, style: {color: `purple`}, prompt: true, date: getTime(), path: path, value: value}]);
+    if (value.slice(0, 3) === "ls") {
+      setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: ls(filesystem, path)}]);
     }
-    else if (this.state.value === "pwd") {
-      this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: this.state.path}]
-      }));
+    else if (value === "pwd") {
+      setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: path}]);
 
     }
-    else if (this.state.value === "cls" || this.state.value === "clear") {
-      this.setState((previousState) => ({
-        history: []
-      }));
+    else if (value === "cls" || value === "clear") {
+      setHistory([]);
     }
-    else if (this.state.value === "whoami") {
-      this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: "q3st1on"}]
-      }));
+    else if (value === "whoami") {
+      setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: "q3st1on"}]);
     }
-    else if (this.state.value === "id") {
-      this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: "uid=1000(q3st1on) gid=1000(q3st1on) groups=1000(q3st1on),5(tty)"}]
-      }));
+    else if (value === "id") {
+      setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: "uid=1000(q3st1on) gid=1000(q3st1on) groups=1000(q3st1on),5(tty)"}]);
     }
-    else if (this.state.value.slice(0,3) === "cd ") {
-      let val = (cd(this.state.value.slice(-(this.state.value.length-3)), this.state.filesystem, this.state.path));
+    else if (value.slice(0,3) === "cd ") {
+      let val = (cd(value.slice(-(value.length-3)), filesystem, path));
       if (val.ret1 !== "error"){
-        this.setState((state) => {
-          return {path: val.ret1};
-        });
+        setPath(val.ret1);
       } else {
-        this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: val.ret2}]
-        }));
+        setHistory([history, {id: counter, command: false, style: {color: `red`}, prompt: false, value: val.ret2}]);
       }
     }
-    else if (this.state.value.slice(0,4) === "cat ") {
-      let val = (cat(this.state.value.slice(4), this.state.filesystem, this.state.path));
+    else if (value.slice(0,4) === "cat ") {
+      let val = (cat(value.slice(4), filesystem, path));
       if (val.ret1 === "error"){
-        this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: (val.ret2)}]
-        }));
+          setHistory([history, {id: counter, command: false, style: {color: `red`}, prompt: false, value: (val.ret2)}]);
       } else {
-        this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: (val.ret1)}]
-        }));
+        setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: (val.ret1)}]);
       }
     }
-    else if (this.state.value.slice(0,4) === "sudo") {
-      this.setState((previousState) => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: "As If I'd Trust You With That :)"}]
-      }));
+    else if (value.slice(0,4) === "sudo") {
+      setHistory([history, {id: counter, command: false, style: {color: `red`}, prompt: false, value: "As If I'd Trust You With That :)"}]);
     }
-    else if ((this.state.value.slice(0,4) === "help") || (this.state.value.slice(0,1) === "?")) {
-      if (((this.state.value.slice(0,4) === "help") && (this.state.value.length > 4))) {
-        this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, this.state.value.slice(5, this.state.value.length))}]
-        }));
-      } else if (((this.state.value.slice(0,1) === "?") && (this.state.value.length > 1))) {
-        this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, this.state.value.slice(2, this.state.value.length))}]
-        }));
+    else if ((value.slice(0,4) === "help") || (value.slice(0,1) === "?")) {
+      if (((value.slice(0,4) === "help") && (value.length > 4))) {
+          setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), path, value.slice(5, value.length))}]);
+      } else if (((value.slice(0,1) === "?") && (value.length > 1))) {
+        setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), path, value.slice(2, value.length))}]);
       } else {
-        this.setState((previousState) => ({
-          history: [...previousState.history, {id: this.counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), this.state.path, "")}]
-        }));
+        setHistory([history, {id: counter, command: false, style: {color: `lightblue`}, prompt: false, value: help(this.getTime(), path, "")}]);
       }
-    } else if (this.state.value.slice(0,2) === "./") {
-      let ret = exec(this.state.value.slice(2, this.state.value.length), this.state.filesystem, this.state.path);
-      this.setState(previousState => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: ret.style, prompt: false, value: ret.value}]
-      }));
+    } else if (value.slice(0,2) === "./") {
+      let ret = exec(value.slice(2, value.length), filesystem, path);
+        setHistory([history, {id: counter, command: false, style: ret.style, prompt: false, value: ret.value}]);
       if (ret.errorcheck !== 'a' && ret.errorcheck !== 'b') {
-        this.setState((state) => {
-          return {current_program: state.current_program = ret.value};
-        });
+        setCurrent_program(ret.value);
       }
-    }else if (this.state.value === "") {
+    }else if (value === "") {
 
     }
     else {
-      this.setState(previousState => ({
-        history: [...previousState.history, {id: this.counter, command: false, style: {color: `red`}, prompt: false, value: "jsh: command not found: "+this.state.value}]
-      }));
+        setHistory( [history, {id: counter, command: false, style: {color: `red`}, prompt: false, value: "jsh: command not found: "+value}]);
     }
-    this.setState((state) => {
-      return {value: state.value = ""};
-    });
+    setValue("");
     event.preventDefault();
-    this.setState((state) => {
-      return {currentid: state.currentid = this.counter};
-    });
-  }
+    setCurrentid(counter);
+  };
 
-  createHistory(history) {
+  const createHistory = (history) => {
     return history.map[history];
-  }
+  };
 
-  getTime() {
+  const getTime = () => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",  "Aug", "Sep", "Oct", "Nov", "Dec"];
     const days = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
     var currentDate = new Date(); 
     var dateTime = days[currentDate.getDay()] + " "+ months[currentDate.getMonth()]  + " " + currentDate.getDate() + ", "  + currentDate.getHours() + ":"  + currentDate.getMinutes();
     return(dateTime)
-  }
+  };
 
-  getPrompt(time, path) {
+  const getPrompt = (time, path) => {
     if (time !== "" && path !== "") {
       return(
         <label>
@@ -250,9 +205,9 @@ export class TerminalForm extends React.Component {
         </label>
       )
     }
-  }
+  };
 
-  renderHistory(history) {
+  const renderHistory = (history) => {
     const zip = (a, b) => Array(Math.max(b.length, a.length)).fill().map((_,i) => [a[i], b[i]]);
     let promptdict = [];
     let plaindict = [];
@@ -297,65 +252,58 @@ export class TerminalForm extends React.Component {
         ))}
       </div>
     )
-  }
+  };
   /*THIS IS THE END OF CODE FOR RENDERING THE TTY*/
-  
-  render() {
-    console.log(this.state.current_program)
-    if (this.state.current_program === "jsh") {
+  const changeToTqls = () => changeProg("tqls");
+
+
+    console.log(current_program)
+    if (current_program === "jsh") {
       return (
         <>
-        <form onSubmit={this.handlettySubmit}>
+        <form onSubmit={handlettySubmit()}>
           <div>
-            {this.renderHistory(this.state.history)}
+            {renderHistory(history)}
           </div>
-          {this.commandout}
-          <label id = "inputbox" ref={this.messagesEndRef} >
-            {this.getPrompt(this.getTime(), this.state.path)}
+          <label id = "inputbox">
+            {getPrompt(getTime(), path)}
             <label>
-              <AutosizeInput onKeyDown={this.onKeyDownHandler}
+              <AutosizeInput onKeyDown={onKeyDownHandler()}
               autoComplete="off" nname="inputLine" class="no-outline"
-              type="text" value={this.state.value} onChange={this.handleChange} />
+              type="text" value={value} onChange={handleChange()} />
             </label>
           </label>
         </form>
         </>
       );
     } else {
-      this.setState((state) => {
-        return {current_program: state.current_program = "jsh"};
-      });
-      try{
-      <currentProgContext.Consumer>
-        {({ prog, toggleProg }) => (
-          prog = 'tqls',
-          toggleProg(toggleProg)
-        )};
-      </currentProgContext.Consumer>
+      setCurrent_program("jsh");
+      try {
+        this.changeToTqls();
       } catch(e) {
         console.log("Error: "+e)
       }
       console.log("tlqs lmao");
-      console.log(this.props);
-      console.log(currentProgContext);
+      console.log(props);
+      console.log(progContext);
       return(
         <>
-        <form onSubmit={this.handlettySubmit}>
+        <form onSubmit={handlettySubmit()}>
           <div>
-            {this.renderHistory(this.state.history)}
+            {renderHistory(history)}
           </div>
-          {this.commandout}
-          <label id = "inputbox" ref={this.messagesEndRef} >
-            {this.getPrompt(this.getTime(), this.state.path)}
+          <label id = "inputbox">
+            {getPrompt(getTime(), path)}
             <label>
-              <AutosizeInput onKeyDown={this.onKeyDownHandler}
+              <AutosizeInput onKeyDown={onKeyDownHandler()}
               autoComplete="off" nname="inputLine" class="no-outline"
-              type="text" value={this.state.value} onChange={this.handleChange} />
+              type="text" value={value} onChange={handleChange()} />
             </label>
           </label>
         </form>
         </>
       );
-    }
-  }
-}
+    };
+};
+
+export default TerminalForm();
