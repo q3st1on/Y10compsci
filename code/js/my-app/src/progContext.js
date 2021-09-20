@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 const progContext = createContext({
-    program: 'jsh',
+    program: 'tlqs',
     changeProg: (prog) => {}
 });
 export default progContext;

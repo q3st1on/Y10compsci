@@ -23,6 +23,6 @@ export function exec(binary, folder, path) {
         out = "jsh: permission denied: "+path+"/"+binary;
     }
 
-    /*return({style: {color: `lightblue`}, value: out, errorcheck: index})*/
-    return({style: {color: `lightblue`}, value: "tqls", errorcheck: 0})
+    return({style: {color: `lightblue`}, value: out, errorcheck: index})
+    /*return({style: {color: `lightblue`}, value: "tqls", errorcheck: 0})*/
 }

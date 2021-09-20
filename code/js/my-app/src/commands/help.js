@@ -1,3 +1,5 @@
+import { exec } from "./exec";
+
 export function help(time, path, command) {
     if (command !== "") {
         return(
@@ -34,6 +36,7 @@ export function help(time, path, command) {
                 {cat()}
                 {id()}
                 {whoami()} 
+                {execfile()}
             </div>
         </div>
     )
@@ -52,6 +55,8 @@ function custom(command) {
         return(whoami());
     } else if (command === "cd") {
         return(cd());
+    } else if(command === "exec") {
+        return(execfile());
     }
 }
 
@@ -72,7 +77,7 @@ function cat() {
         <div>
             <div><b>{"cat"}</b></div>
             <div>{"the cat command prints the contents of a user specified file"}</div>
-            <div>{"e.g. cat file                | this will print the contents of file"}</div>
+            <div>{"e.g. cat file                 | this will print the contents of file"}</div>
             <br></br>
         </div>
     )
@@ -83,8 +88,8 @@ function ls(path) {
         <div>
             <div><b>{"ls"}</b></div>
             <div>{"The ls command lists the contents of the directory you are currently in or one specified"}</div>
-            <div>{"e.g. ls                    | this will list the files in "}{path}</div>
-            <div>{"e.g. ls /home      | this will list the files in /home"}</div>
+            <div>{"e.g. ls                         | this will list the files in "}{path}</div>
+            <div>{"e.g. ls /home           | this will list the files in /home"}</div>
             <br></br>
         </div>
     )
@@ -94,7 +99,7 @@ function id() {
         <div>
             <div><b>{"id"}</b></div>
             <div>{"the id command lists the privelages that you have on teh system"}</div>
-            <div>{"e.g. id                    | this will show you have privs: uid=1000(q3st1on) gid=1000(q3st1on) groups=1000(q3st1on),5(tty)"}</div>
+            <div>{"e.g. id                          | this will show you have privs: uid=1000(q3st1on) gid=1000(q3st1on) groups=1000(q3st1on),5(tty)"}</div>
             <br></br>
         </div>
     )
@@ -104,7 +109,7 @@ function pwd(path) {
         <div>
             <div><b>{"pwd"}</b></div>
             <div>{"the pwd command prints the directory the user in currently in (hence the name pwd: Print Working Directory)"}</div>
-            <div>{"e.g. pwd                | this will print "}{path}</div>
+            <div>{"e.g. pwd                     | this will print "}{path}</div>
             <br></br>
         </div>
     )
@@ -114,7 +119,17 @@ function whoami() {
         <div>
             <div><b>{"whoami"}</b></div>
             <div>{"the whoami command prints the name of the user who ran id"}</div>
-            <div>{"e.g. whoami                | this will print q3st1on"}</div>
+            <div>{"e.g. whoami             | this will print q3st1on"}</div>
+            <br></br>
+        </div>
+    )
+}
+function execfile() {
+    return(
+        <div>
+            <div><b>{"exec"}</b></div>
+            <div>{"exec command (run by going \"./\" to an executable file) will execute) a user specified program."}</div>
+            <div>{"e.g. ./program          | this will execute program"}</div>
             <br></br>
         </div>
     )

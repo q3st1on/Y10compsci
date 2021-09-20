@@ -261,16 +261,16 @@ const TerminalForm = (props) => {
     if (current_program === "jsh") {
       return (
         <>
-        <form onSubmit={handlettySubmit()}>
+        <form onSubmit={() => handlettySubmit()}>
           <div>
             {renderHistory(history)}
           </div>
           <label id = "inputbox">
             {getPrompt(getTime(), path)}
             <label>
-              <AutosizeInput onKeyDown={onKeyDownHandler()}
+              <AutosizeInput onKeyDown={() => onKeyDownHandler()}
               autoComplete="off" nname="inputLine" class="no-outline"
-              type="text" value={value} onChange={handleChange()} />
+              type="text" value={value} onChange={() => handleChange()} />
             </label>
           </label>
         </form>
@@ -288,16 +288,16 @@ const TerminalForm = (props) => {
       console.log(progContext);
       return(
         <>
-        <form onSubmit={handlettySubmit()}>
+        <form onSubmit={() => handlettySubmit()}>
           <div>
             {renderHistory(history)}
           </div>
           <label id = "inputbox">
             {getPrompt(getTime(), path)}
             <label>
-              <AutosizeInput onKeyDown={onKeyDownHandler()}
+              <AutosizeInput onKeyDown={() => onKeyDownHandler()}
               autoComplete="off" nname="inputLine" class="no-outline"
-              type="text" value={value} onChange={handleChange()} />
+              type="text" value={value} onChange={() => handleChange()} />
             </label>
           </label>
         </form>
